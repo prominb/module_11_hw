@@ -118,16 +118,6 @@ class AddressBook(UserDict):
     
     def iterator(self, records_number):  # повертає генератор за записами AddressBook (за одну ітерацію повертає N записів).
         counter = 0
-        # result = ''
-        # for key, value in self.data.items():
-        #     result += f'{value}\n'
-        #     counter += 1
-        #     if counter >= records_number:
-        #         yield result
-        #         counter = 0
-        #         result = ''
-        #         break
-
         convert_list = list(self.data.items())
         while counter < len(convert_list):
             convert_dict = dict(convert_list[counter : counter + records_number])
