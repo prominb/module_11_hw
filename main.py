@@ -46,18 +46,28 @@ class Birthday(Field):
         # self.__value = None
         # self.value = value
         # self._value = value
-    
-    @property
-    def set_birthday(self):
-        # return self._value
-        return self.value
-        # return self.__value
 
     # Перевірка на коректність веденого дня народження setter для value класу Birthday.
-    @set_birthday.setter
+    # def set_birthday(self, new_value):
+    #     if new_value:
+    #         self._value = datetime.strptime(new_value, "%d.%m.%Y")
+    # ValueError: time data '44.2.2014' does not match format '%d.%m.%Y'
     def set_birthday(self, new_value):
         if new_value:
-            self.value = datetime.strptime(new_value, "%d/%m/%Y")
+            self._value = datetime.strptime(new_value, "%d.%m.%Y")
+            # print(self._value, type(self._value))
+
+    @property
+    def value(self):
+        return self._value
+        # return self.value
+        # return self.__value
+    
+    @value.setter
+    def value(self, new_value):
+        self._value = new_value
+        # self.check_phone(self._value)
+        self.set_birthday(self._value)
 
 
 class Record:
@@ -93,9 +103,25 @@ class Record:
             return item
     
     def days_to_birthday(self):  # повертає кількість днів до наступного дня народження.
-        # pass
-        if self.birthday:
-            return self.birthday - datetime.now()
+        today = datetime.now()
+        test1 = self.birthday.value
+        test1.strptime
+        # print(f"WWWW - {test1}")
+        # print(type(test1))
+        test1 = test1.replace(year=today.year)
+        # if test1 is None:
+            # return 'QQQQQQQQQQQQQ'
+        # result = today - test1
+        # print(result)
+        today = today.date()
+        # print(today)
+        test1 = test1.date()
+
+        # return result
+        if test1:
+            # result = today - test1
+            result = test1 - today
+            return f'Next Bday = {result}'
         return "Empty Birthday field!"
 
 
@@ -121,23 +147,28 @@ class AddressBook(UserDict):
 book = AddressBook()
 
 # Створення запису для John
-john_record = Record("John")
+# john_record = Record("John")
 # john_record = Record("John", "27/02/2024")
+# john_record = Record("John", "27/02/2014")
+john_record = Record("John", "3.2.2014")
+# john_record = Record("John", "27.1.2014")
 john_record.add_phone("1234567890")
-# john_record.add_phone("5555555555")
-john_record.add_phone("555555")
+john_record.add_phone("5555555555")
+# john_record.add_phone("555555")
 # john_record.add_phone("555qq5555")
 
-# print(john_record.birthday)
-# print(john_record.days_to_birthday())
+print(john_record.birthday, type(john_record.birthday), repr(john_record.birthday))
+# john_record.birthday
+print(john_record.days_to_birthday())
+# john_record.days_to_birthday()
 
 # Додавання запису John до адресної книги
 book.add_record(john_record)
 
 # Створення та додавання нового запису для Jane
-jane_record = Record("Jane")
-jane_record.add_phone("9876543210")
-book.add_record(jane_record)
+# jane_record = Record("Jane")
+# jane_record.add_phone("9876543210")
+# book.add_record(jane_record)
 
 # # Виведення всіх записів у книзі
 # for name, record in book.data.items():
@@ -158,8 +189,8 @@ book.add_record(jane_record)
 
 
 # Виведення всіх записів у книзі
-for name, record in book.data.items():
-    print(record)
+# for name, record in book.data.items():
+#     print(record)
 
 
 
