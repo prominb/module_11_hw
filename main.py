@@ -4,6 +4,7 @@ from datetime import datetime
 
 class Field:
     def __init__(self, value):
+        # self.value = value
         self.value = value
 
     def __str__(self):
@@ -17,32 +18,33 @@ class Name(Field):
 
 class Phone(Field):
     def __init__(self, value):
-        # self.__value = None
-        # self.__value = value
-        self.value = value
-        # self.value = self.check_phone(value)
-    
-    @property
-    def check_phone(self):
-        return self.value
+        super().__init__(value)
 
     # Перевірка на коректність веденого номера телефону setter для value класу Phone.
-    @check_phone.setter
-    def check_phone(self, new_value):  # Реалізовано валідацію номера телефону (має бути 10 цифр).
-        if len(new_value) == 10 and new_value.isdecimal():
-        # if len(value) != 10 and  not value.isdecimal():
-            # return value
-            self.value = new_value
-            # raise ValueError("Phone must contain 10 digits only!")
-        else:
+    # def check_phone(self, new_value):
+    #     if len(new_value) != 10 or not new_value.isdecimal():  # Реалізовано валідацію номера телефону (має бути 10 цифр).
+    #         raise ValueError("Phone must contain 10 digits only!")
+    def check_phone(self):
+        if len(self._value) != 10 or not self._value.isdecimal():  # Реалізовано валідацію номера телефону (має бути 10 цифр).
             raise ValueError("Phone must contain 10 digits only!")
-        # self._value = value
+    
+    @property
+    def value(self):
+        return self._value
+
+    @value.setter
+    def value(self, new_value):
+        self._value = new_value
+        # self.check_phone(self._value)
+        self.check_phone()
 
 
 class Birthday(Field):
     def __init__(self, value):
+        super().__init__(value)
+    # def __init__(self, value):
         # self.__value = None
-        self.value = value
+        # self.value = value
         # self._value = value
     
     @property
@@ -67,7 +69,7 @@ class Record:
         self.birthday = Birthday(birthday)  # опціональний аргумент класу Birthday
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+        return f"Contact name: {self.name.value}, phones: {'; '.join(p._value for p in self.phones)}"
 
     # Реалізовано методи для:
     def add_phone(self, phone: str):  # додавання - add_phone
@@ -119,15 +121,15 @@ class AddressBook(UserDict):
 book = AddressBook()
 
 # Створення запису для John
-# john_record = Record("John")
-john_record = Record("John", "27/02/2024")
+john_record = Record("John")
+# john_record = Record("John", "27/02/2024")
 john_record.add_phone("1234567890")
 # john_record.add_phone("5555555555")
 john_record.add_phone("555555")
-john_record.add_phone("555qq5555")
+# john_record.add_phone("555qq5555")
 
-print(john_record.birthday)
-print(john_record.days_to_birthday())
+# print(john_record.birthday)
+# print(john_record.days_to_birthday())
 
 # Додавання запису John до адресної книги
 book.add_record(john_record)
