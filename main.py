@@ -4,7 +4,6 @@ from datetime import datetime
 
 class Field:
     def __init__(self, value):
-        # self.value = value
         self.value = value
 
     def __str__(self):
@@ -21,9 +20,6 @@ class Phone(Field):
         super().__init__(value)
 
     # Перевірка на коректність веденого номера телефону setter для value класу Phone.
-    # def check_phone(self, new_value):
-    #     if len(new_value) != 10 or not new_value.isdecimal():  # Реалізовано валідацію номера телефону (має бути 10 цифр).
-    #         raise ValueError("Phone must contain 10 digits only!")
     def check_phone(self):
         if len(self._value) != 10 or not self._value.isdecimal():  # Реалізовано валідацію номера телефону (має бути 10 цифр).
             raise ValueError("Phone must contain 10 digits only!")
@@ -35,38 +31,27 @@ class Phone(Field):
     @value.setter
     def value(self, new_value):
         self._value = new_value
-        # self.check_phone(self._value)
         self.check_phone()
 
 
 class Birthday(Field):
     def __init__(self, value):
         super().__init__(value)
-    # def __init__(self, value):
-        # self.__value = None
-        # self.value = value
-        # self._value = value
 
-    # Перевірка на коректність веденого дня народження setter для value класу Birthday.
-    # def set_birthday(self, new_value):
-    #     if new_value:
-    #         self._value = datetime.strptime(new_value, "%d.%m.%Y")
     # ValueError: time data '44.2.2014' does not match format '%d.%m.%Y'
     def set_birthday(self, new_value):
         if new_value:
             self._value = datetime.strptime(new_value, "%d.%m.%Y")
-            # print(self._value, type(self._value))
+        else:
+            return 'Field "Birthday" is Empty!'
 
     @property
     def value(self):
         return self._value
-        # return self.value
-        # return self.__value
     
     @value.setter
     def value(self, new_value):
         self._value = new_value
-        # self.check_phone(self._value)
         self.set_birthday(self._value)
 
 
@@ -103,26 +88,20 @@ class Record:
             return item
     
     def days_to_birthday(self):  # повертає кількість днів до наступного дня народження.
-        today = datetime.now()
-        test1 = self.birthday.value
-        test1.strptime
-        # print(f"WWWW - {test1}")
-        # print(type(test1))
-        test1 = test1.replace(year=today.year)
-        # if test1 is None:
-            # return 'QQQQQQQQQQQQQ'
-        # result = today - test1
-        # print(result)
-        today = today.date()
-        # print(today)
-        test1 = test1.date()
-
-        # return result
-        if test1:
-            # result = today - test1
-            result = test1 - today
-            return f'Next Bday = {result}'
-        return "Empty Birthday field!"
+        # print(str(self.birthday), self.birthday.value is None, type(self.birthday))
+        if not self.birthday.value:
+            return 'Field "Birthday" is Empty!'
+        else:
+            today = datetime.now().date()
+            test1 = self.birthday.value
+            test1.strptime
+            test1 = test1.replace(year=today.year)
+            # today = today.date()
+            test1 = test1.date()
+            if test1:
+                result = test1 - today
+                return f'Next Bday = {result}'
+        # return "Empty Birthday field!"
 
 
 class AddressBook(UserDict):
@@ -157,7 +136,7 @@ john_record.add_phone("5555555555")
 # john_record.add_phone("555555")
 # john_record.add_phone("555qq5555")
 
-print(john_record.birthday, type(john_record.birthday), repr(john_record.birthday))
+# print(john_record.birthday, type(john_record.birthday), repr(john_record.birthday))
 # john_record.birthday
 print(john_record.days_to_birthday())
 # john_record.days_to_birthday()
@@ -166,9 +145,9 @@ print(john_record.days_to_birthday())
 book.add_record(john_record)
 
 # Створення та додавання нового запису для Jane
-# jane_record = Record("Jane")
-# jane_record.add_phone("9876543210")
-# book.add_record(jane_record)
+jane_record = Record("Jane")
+jane_record.add_phone("9876543210")
+book.add_record(jane_record)
 
 # # Виведення всіх записів у книзі
 # for name, record in book.data.items():
@@ -189,8 +168,8 @@ book.add_record(john_record)
 
 
 # Виведення всіх записів у книзі
-# for name, record in book.data.items():
-#     print(record)
+for name, record in book.data.items():
+    print(record)
 
 
 
