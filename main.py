@@ -42,8 +42,6 @@ class Birthday(Field):
     def set_birthday(self, new_value):
         if new_value:
             self._value = datetime.strptime(new_value, "%d.%m.%Y")
-        else:
-            return 'Field "Birthday" is Empty!'
 
     @property
     def value(self):
@@ -96,17 +94,13 @@ class Record:
             test1 = self.birthday.value
             test1.strptime
             test1 = test1.replace(year=today.year)
-            # today = today.date()
             test1 = test1.date()
-            # print(test1 < today)
-            # print(test1 > today)
             if test1 > today:
                 result = test1 - today
                 return f'Next Bday = {result.days}'
             else:
                 result = test1.replace(year=today.year + 1) - today
                 return f'Next Bday = {result.days}. It was {(test1 - today).days} days ago.'
-        # return "Empty Birthday field!"
 
 
 class AddressBook(UserDict):
@@ -123,27 +117,42 @@ class AddressBook(UserDict):
         if name in self.data:
             return f'Record with {self.data.pop(name)} was removed!'
     
-    def iterator(self):  # повертає генератор за записами AddressBook (за одну ітерацію повертає N записів).
-        pass
+    def iterator(self, records_number):  # повертає генератор за записами AddressBook (за одну ітерацію повертає N записів).
+        counter = 0
+        result = ''
+        for key, value in self.data.items():
+            # result += f'Contact name: {key}, phones: {value}\n'
+            result += f'{value}\n'
+            counter += 1
+            if counter >= records_number:
+                yield result
+                counter = 0
+                result = ''
+                break
+        # while counter < records_number:
+            # yield f"Contact name: {self.name.value}, phones: {'; '.join(p._value for p in self.phones)}"
+            # yield self.data.items()
+            # counter += 1
 
 
 # Створення нової адресної книги
 book = AddressBook()
 
 # Створення запису для John
-# john_record = Record("John")
+john_record = Record("John")
 # john_record = Record("John", "27/02/2024")
 # john_record = Record("John", "27/02/2014")
-# john_record = Record("John", "3.2.2014")
-john_record = Record("John", "27.1.2014")
+# john_record = Record("John", "3.2.2014")  # WORK
+# john_record = Record("John", "27.1.2014")  # WORK
+# john_record = Record("John", "27.21.2014")  # WORK
 john_record.add_phone("1234567890")
 john_record.add_phone("5555555555")
-# john_record.add_phone("555555")
-# john_record.add_phone("555qq5555")
+# john_record.add_phone("555555")  # WORK
+# john_record.add_phone("555qq5555")  # WORK
 
 # print(john_record.birthday, type(john_record.birthday), repr(john_record.birthday))
 # john_record.birthday
-print(john_record.days_to_birthday())
+# print(john_record.days_to_birthday())
 # john_record.days_to_birthday()
 
 # Додавання запису John до адресної книги
@@ -173,9 +182,58 @@ book.add_record(jane_record)
 
 
 # Виведення всіх записів у книзі
-for name, record in book.data.items():
-    print(record)
+# for name, record in book.data.items():
+#     print(record)
 
+
+test1_record = Record("Test1")
+test1_record.add_phone("1111111111")
+book.add_record(test1_record)
+
+test2_record = Record("Test2")
+test2_record.add_phone("2222222222")
+book.add_record(test2_record)
+
+test3_record = Record("Test3")
+test3_record.add_phone("3333333333")
+book.add_record(test3_record)
+
+test4_record = Record("Test4")
+test4_record.add_phone("4444444444")
+book.add_record(test4_record)
+
+test5_record = Record("Test5")
+test5_record.add_phone("5555555555")
+book.add_record(test5_record)
+
+test6_record = Record("Test6")
+test6_record.add_phone("6666666666")
+book.add_record(test6_record)
+
+# Виведення N записів у книзі
+# book.iterator(3)
+# print(len(book))
+# print(book.data.items())
+# all_test = book.data.items()
+# for i in range(len(all_test)):
+#     print(book.data.get(i))
+# print(list(all_test)[0:3])
+# print(book.iterator(3))
+
+# Виведення N записів у книзі
+records_generator = book.iterator(5)
+# print(records_generator)
+# next(records_generator)
+for i in records_generator:
+    print(i)
+# for name, record in book.data.items():
+    # print(record)
+
+# records_generator = book.iterator(3)
+# next(records_generator)
+# # Виведення N записів у книзі
+# for record in records_generator:
+#     print(record)
 
 
 # # Using datetime.strptime()
