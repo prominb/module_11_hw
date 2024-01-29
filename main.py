@@ -86,7 +86,6 @@ class Record:
             return item
     
     def days_to_birthday(self):  # повертає кількість днів до наступного дня народження.
-        # print(str(self.birthday), self.birthday.value is None, type(self.birthday))
         if not self.birthday.value:
             return 'Field "Birthday" is Empty!'
         else:
@@ -119,20 +118,22 @@ class AddressBook(UserDict):
     
     def iterator(self, records_number):  # повертає генератор за записами AddressBook (за одну ітерацію повертає N записів).
         counter = 0
-        result = ''
-        for key, value in self.data.items():
-            # result += f'Contact name: {key}, phones: {value}\n'
-            result += f'{value}\n'
-            counter += 1
-            if counter >= records_number:
-                yield result
-                counter = 0
-                result = ''
-                break
-        # while counter < records_number:
-            # yield f"Contact name: {self.name.value}, phones: {'; '.join(p._value for p in self.phones)}"
-            # yield self.data.items()
-            # counter += 1
+        # result = ''
+        # for key, value in self.data.items():
+        #     result += f'{value}\n'
+        #     counter += 1
+        #     if counter >= records_number:
+        #         yield result
+        #         counter = 0
+        #         result = ''
+        #         break
+
+        convert_list = list(self.data.items())
+        while counter < len(convert_list):
+            convert_dict = dict(convert_list[counter : counter + records_number])
+            for key, value in convert_dict.items():
+                yield value
+                counter += records_number - 1
 
 
 # Створення нової адресної книги
@@ -211,31 +212,6 @@ test6_record.add_phone("6666666666")
 book.add_record(test6_record)
 
 # Виведення N записів у книзі
-# book.iterator(3)
-# print(len(book))
-# print(book.data.items())
-# all_test = book.data.items()
-# for i in range(len(all_test)):
-#     print(book.data.get(i))
-# print(list(all_test)[0:3])
-# print(book.iterator(3))
-
-# Виведення N записів у книзі
 records_generator = book.iterator(5)
-# print(records_generator)
-# next(records_generator)
 for i in records_generator:
     print(i)
-# for name, record in book.data.items():
-    # print(record)
-
-# records_generator = book.iterator(3)
-# next(records_generator)
-# # Виведення N записів у книзі
-# for record in records_generator:
-#     print(record)
-
-
-# # Using datetime.strptime()
-# dt = datetime.strptime("21/11/06 16:30", "%d/%m/%y %H:%M")
-# dt
