@@ -98,9 +98,14 @@ class Record:
             test1 = test1.replace(year=today.year)
             # today = today.date()
             test1 = test1.date()
-            if test1:
+            # print(test1 < today)
+            # print(test1 > today)
+            if test1 > today:
                 result = test1 - today
-                return f'Next Bday = {result}'
+                return f'Next Bday = {result.days}'
+            else:
+                result = test1.replace(year=today.year + 1) - today
+                return f'Next Bday = {result.days}. It was {(test1 - today).days} days ago.'
         # return "Empty Birthday field!"
 
 
@@ -129,8 +134,8 @@ book = AddressBook()
 # john_record = Record("John")
 # john_record = Record("John", "27/02/2024")
 # john_record = Record("John", "27/02/2014")
-john_record = Record("John", "3.2.2014")
-# john_record = Record("John", "27.1.2014")
+# john_record = Record("John", "3.2.2014")
+john_record = Record("John", "27.1.2014")
 john_record.add_phone("1234567890")
 john_record.add_phone("5555555555")
 # john_record.add_phone("555555")
